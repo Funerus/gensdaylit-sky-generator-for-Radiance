@@ -1,0 +1,387 @@
+# Local datetime: 2023-03-01 07:30:00+00:00
+# Solar elevation and azimuth: 88.7 118.3
+# epsilon, delta: 1.000 0.054
+        
+# Create the specfile primitive containing the sun's spectral composition
+void specfile sun_spectrum
+1 skies/spectrum/sun_spectrum_N18_20230301_073000.dat
+0
+0
+
+sun_spectrum light radiance
+0
+0
+3 0.0 0.0 0.0
+
+radiance source sun0
+0
+0
+4 0.852472 -0.457727 0.252542 0.538004
+
+radiance source sun1
+0
+0
+4 0.851952 -0.458444 0.252994 0.538004
+
+radiance source sun2
+0
+0
+4 0.852522 -0.458106 0.251683 0.538004
+
+radiance source sun3
+0
+0
+4 0.852397 -0.457419 0.253352 0.538004
+
+radiance source sun4
+0
+0
+4 0.851795 -0.459095 0.252341 0.538004
+
+radiance source sun5
+0
+0
+4 0.852958 -0.457200 0.251855 0.538004
+
+radiance source sun6
+0
+0
+4 0.851809 -0.458218 0.253885 0.538004
+
+radiance source sun7
+0
+0
+4 0.852267 -0.458837 0.251216 0.538004
+
+radiance source sun8
+0
+0
+4 0.852870 -0.456683 0.253088 0.538004
+
+radiance source sun9
+0
+0
+4 0.851405 -0.459356 0.253184 0.538004
+
+radiance source sun10
+0
+0
+4 0.853011 -0.457604 0.250941 0.538004
+
+radiance source sun11
+0
+0
+4 0.852144 -0.457360 0.254308 0.538004
+
+radiance source sun12
+0
+0
+4 0.851720 -0.459656 0.251575 0.538004
+
+radiance source sun13
+0
+0
+4 0.853314 -0.456394 0.252112 0.538004
+
+radiance source sun14
+0
+0
+4 0.851331 -0.458908 0.254242 0.538004
+
+radiance source sun15
+0
+0
+4 0.852647 -0.458572 0.250411 0.538004
+
+radiance source sun16
+0
+0
+4 0.852761 -0.456397 0.253970 0.538004
+
+radiance source sun17
+0
+0
+4 0.851186 -0.460063 0.252636 0.538004
+
+radiance source sun18
+0
+0
+4 0.853455 -0.456804 0.250886 0.538004
+
+radiance source sun19
+0
+0
+4 0.851681 -0.457866 0.254948 0.538004
+
+radiance source sun20
+0
+0
+4 0.851973 -0.459695 0.250645 0.538004
+
+radiance source sun21
+0
+0
+4 0.853396 -0.455815 0.252880 0.538004
+
+radiance source sun22
+0
+0
+4 0.850941 -0.459753 0.254020 0.538004
+
+radiance source sun23
+0
+0
+4 0.853155 -0.457872 0.249961 0.538004
+
+radiance source sun24
+0
+0
+4 0.852383 -0.456593 0.254885 0.538004
+
+radiance source sun25
+0
+0
+4 0.851235 -0.460481 0.251705 0.538004
+
+radiance source sun26
+0
+0
+4 0.853764 -0.455964 0.251364 0.538004
+
+radiance source sun27
+0
+0
+4 0.851156 -0.458711 0.255181 0.538004
+
+radiance source sun28
+0
+0
+4 0.852449 -0.459272 0.249800 0.538004
+
+radiance source sun29
+0
+0
+4 0.853210 -0.455584 0.253921 0.538004
+
+radiance source sun30
+0
+0
+4 0.850730 -0.460535 0.253310 0.538004
+
+radiance source sun31
+0
+0
+4 0.853662 -0.456923 0.249966 0.538004
+
+radiance source sun32
+0
+0
+4 0.851830 -0.457221 0.255606 0.538004
+
+radiance source sun33
+0
+0
+4 0.851547 -0.460503 0.250609 0.538004
+
+radiance source sun34
+0
+0
+4 0.853858 -0.455283 0.252278 0.538004
+
+radiance source sun35
+0
+0
+4 0.850691 -0.459713 0.254928 0.538004
+
+radiance source sun36
+0
+0
+4 0.853050 -0.458457 0.249244 0.538004
+
+radiance source sun37
+0
+0
+4 0.852777 -0.455782 0.255016 0.538004
+
+radiance source sun38
+0
+0
+4 0.850760 -0.461072 0.252230 0.538004
+
+radiance source sun39
+0
+0
+4 0.854055 -0.455913 0.250468 0.538004
+
+radiance source sun40
+0
+0
+4 0.851205 -0.458188 0.255957 0.538004
+
+radiance source sun41
+0
+0
+4 0.852081 -0.460082 0.249566 0.538004
+
+radiance source sun42
+0
+0
+4 0.853691 -0.454927 0.253483 0.538004
+
+radiance source sun43
+0
+0
+4 0.850391 -0.460679 0.254185 0.538004
+
+radiance source sun44
+0
+0
+4 0.853668 -0.457369 0.249128 0.538004
+
+radiance source sun45
+0
+0
+4 0.852156 -0.456421 0.255949 0.538004
+
+radiance source sun46
+0
+0
+4 0.851057 -0.461223 0.250948 0.538004
+
+radiance source sun47
+0
+0
+4 0.854239 -0.455034 0.251434 0.538004
+
+radiance source sun48
+0
+0
+4 0.850620 -0.459349 0.255819 0.538004
+
+radiance source sun49
+0
+0
+4 0.852764 -0.459238 0.248787 0.538004
+
+radiance source sun50
+0
+0
+4 0.853262 -0.455003 0.254787 0.538004
+
+radiance source sun51
+0
+0
+4 0.850332 -0.461425 0.253026 0.538004
+
+radiance source sun52
+0
+0
+4 0.854188 -0.456176 0.249531 0.538004
+
+radiance source sun53
+0
+0
+4 0.851434 -0.457442 0.256528 0.538004
+
+radiance source sun54
+0
+0
+4 0.851602 -0.460909 0.249672 0.538004
+
+radiance source sun55
+0
+0
+4 0.854156 -0.454461 0.252750 0.538004
+
+radiance source sun56
+0
+0
+4 0.850185 -0.460523 0.255154 0.538004
+
+radiance source sun57
+0
+0
+4 0.853495 -0.458065 0.248442 0.538004
+
+radiance source sun58
+0
+0
+4 0.852611 -0.455555 0.255978 0.538004
+
+radiance source sun59
+0
+0
+4 0.850556 -0.461793 0.251599 0.538004
+
+radiance source sun60
+0
+0
+4 0.854511 -0.455067 0.250450 0.538004
+
+radiance source sun61
+0
+0
+4 0.850721 -0.458721 0.256610 0.538004
+
+radiance source sun62
+0
+0
+4 0.852335 -0.460125 0.248616 0.538004
+
+radiance source sun63
+0
+0
+4 0.853785 -0.454328 0.254240 0.538004
+
+radiance source sun64
+0
+0
+4 0.849990 -0.461518 0.254005 0.538004
+
+radiance source sun65
+0
+0
+4 0.854159 -0.456715 0.248642 0.538004
+        
+# Create the specfile primitive containing the sky's spectral composition
+void specfile sky_spectrum
+1 skies/spectrum/sky_spectrum_N18_20230301_073000.dat
+0
+0
+
+# Define the Perez-based sky brightness function
+sky_spectrum brightfunc skyfunc
+2 skybright perezlum.cal
+0
+10 4.312570e+00 1.271812e+00 0.897333 -0.706218 0.139856 -0.167737 -0.088687
+0.852289 -0.458067 0.252542
+
+# Apply the (spectral) skyfunc modifier to the grey sky glow
+skyfunc glow sky_glow
+0
+0
+4 1 1 1 0
+
+# Modify the sky hemisphere defined by its direction and angular diameter
+sky_glow source sky
+0
+0
+4 0 0 1 180
+
+# Use an upside-down sky to represent ground
+skyfunc glow ground_glow
+0
+0
+4 1 1 1 0
+
+ground_glow source ground
+0
+0
+4 0 0 -1 180
+
+# Define a ground plane that locally replaces ground glow with a material
+# whose irradiance depends on the surrounding environment in addition to the sky
+green_grass_N18 ring ground_plane
+0
+0
+8 0 0 -.01 0 0 1 0 100
