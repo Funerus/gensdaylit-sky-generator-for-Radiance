@@ -12,7 +12,7 @@ and example output files (`.rad`) to reproduce basic runs.
 Python ≥ 3.10
 
 ```txt
-numpy>=1.23
-pandas>=1.5
-pvlib>=0.10
-loguru>=0.7
+numpy
+pandas
+pvlib
+loguru
