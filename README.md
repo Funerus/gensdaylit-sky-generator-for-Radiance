@@ -31,7 +31,7 @@ This code accompanies the paper:
 - **Penumbra via proxy suns.** The finite solar disc is sampled with an
   equal-area Fibonacci lattice; proxy-sun radiances sum to the target DNI,
   yielding soft shadows.
-- **Broadband mode.** Setting `n_bands = None` falls back to a conventional
+- **Single-waveband mode.** Setting `n_bands = None` falls back to a conventional
   (non-spectral) sky.
 
 ---
@@ -91,7 +91,7 @@ The main entry point is the `Apollo` class. It is initialized with a
 
 | Attribute       | Type             | Meaning                                                        |
 |-----------------|------------------|----------------------------------------------------------------|
-| `n_bands`       | `int` or `None`  | Number of spectral bands (`None` → luminance-only sky)         |
+| `n_bands`       | `int` or `None`  | Number of spectral bands (`None` → single-waveband sky)         |
 | `n_suns`        | `int` or `None`  | Number of proxy suns (`None` → single point-source sun)        |
 | `material`      | `str`            | Radiance material definition used for the ground plane         |
 | `ground_radius` | `float`          | Radius of the ground ring (m)                                  |
