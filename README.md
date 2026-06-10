@@ -6,6 +6,13 @@ the **spectral composition** of daylight (across the full solar spectrum,
 not just the visible band) and the **angular extent of the solar disc**,
 enabling physically based **penumbra** (soft-shadow) rendering.
 
+The purpose of the script is to create a `.rad` file containing the description
+of the sun and sky in a format that Radiance (v6) understands. The typical
+workflow of setting up the scene is unchanged — the only difference is that
+instead of using another sky generator such as `gendaylit`, `gensky`, or
+`genssky` to create the `.rad` file, you use `gensdaylit`. Ray tracing and
+rendering then proceed as usual.
+
 This code accompanies the paper:
 
 > O. A. Katsikogiannis, O. Isabella, R. Santbergen, H. Ziar.
@@ -39,10 +46,6 @@ This code accompanies the paper:
 ├── CITATION.cff             # Machine-readable citation metadata
 ├── requirements.txt         # Python dependencies
 ├── .gitignore               # Ignores generated .rad/.dat files, caches, etc.
-├── perezlum.cal             # Radiance .cal needed at render time (see Notes)
-├── examples/
-│   ├── run_example.py       # Minimal runnable example
-│   └── sample_comb.csv      # Example per-timestep input data
 └── skies/                   # Output directory (created at runtime)
     └── spectrum/            # Per-band spectral .dat files (created at runtime)
 ```
@@ -65,12 +68,10 @@ pip install -r requirements.txt
 
 ### Dependencies
 
-| Package  | Purpose                                              |
-|----------|------------------------------------------------------|
-| `numpy`  | Vector math, Fibonacci lattice, rotation matrices    |
-| `pandas` | Timestamped input data and timezone-aware timestamps |
-| `pvlib`  | Earth–Sun distance / solar geometry                  |
-| `loguru` | Logging                                              |
+`numpy`
+`pandas`
+`pvlib`
+`loguru`
 
 A working **[Radiance v6](https://www.radiance-online.org/)** installation is
 required to render the generated `.rad` scene descriptions. `gensdaylit`
