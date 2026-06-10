@@ -1,64 +1,33 @@
 """
-gensdaylit, is a Python-based alternative to the classic Radiance
-sky generator gendaylit, developed to model both the spectral composition
-of daylight and the angular extent of the solar disc. 
+
+Version - 0.1.0
+2025-04-19
+
+———————
+gensdaylit: a Python-based alternative to the classic Radiance sky generator
+gendaylit, developed to model both the spectral composition of daylight and
+the angular extent of the solar disc.
+
+Main class:
+    - Apollo: Perez all-weather sky model + solar disc sampling using Fibonacci
+
+Authors:
+Alexandros Katsikogiannis
 
 """
+from __future__ import annotations
 
+import os
+import math
+import posixpath
+import textwrap
+from pathlib import Path
+from loguru import logger
+from typing import Tuple, List, Optional
 
-import os, math
 import numpy as np
 import pandas as pd
-import posixpath
-from pathlib import Path
-from typing import Tuple, List, Optional
-import textwrap
-from loguru import logger
 import pvlib
-
-def write_rad_file(filepath: str, text: str, mute: bool = False) -> None:
-    """Write a Radiance `.rad` text description to disk.
-
-    Ensures `filepath` (as a `pathlib.Path`) is written with `text`. Logs
-    success unless `mute` is True, and raises on failure.
-
-    Args:
-        filepath: Path to the `.rad` file to create.
-        text: The full Radiance description to write.
-        mute: If False, logs an INFO message upon successful write.
-
-    Raises:
-        IOError: If the file cannot be written.
-    """
-    filepath = Path(filepath)  # ensure its a Path
-    try:
-        filepath.write_text(text)
-        if not mute:
-            logger.info(f"Written RAD file: {filepath}")
-    except Exception as exc:
-        logger.error(f"Cannot write RAD file at {filepath}: {exc}")
-        raise
-
-def make_path(base: str, *segments: str) -> str:
-    """Join base path with one or more subdirectories or filenames."""
-    return posixpath.join(base, *segments)
-
-def rotation_matrix(axis, theta_degrees):
-    theta = np.radians(theta_degrees)
-    if axis == 'x':
-        return np.array([[1, 0, 0],
-                            [0, np.cos(theta), -np.sin(theta)],
-                            [0, np.sin(theta), np.cos(theta)]])
-    elif axis == 'y':
-        return np.array([[np.cos(theta), 0, np.sin(theta)],
-                            [0, 1, 0],
-                            [-np.sin(theta), 0, np.cos(theta)]])
-    elif axis == 'z':
-        return np.array([[np.cos(theta), -np.sin(theta), 0],
-                            [np.sin(theta), np.cos(theta), 0],
-                            [0, 0, 1]])
-    else:
-        raise ValueError("Axis must be 'x', 'y', or 'z'.")
 
 # -------------------------------------------------------------------
 # Module-level constants
@@ -104,8 +73,52 @@ _PHI_GRID = [
 ]
 # -------------------------------------------------------------------
 
+def write_rad_file(filepath: str, text: str, mute: bool = False) -> None:
+    """Write a Radiance `.rad` text description to disk.
 
-class SkyGen:
+    Ensures `filepath` (as a `pathlib.Path`) is written with `text`. Logs
+    success unless `mute` is True, and raises on failure.
+
+    Args:
+        filepath: Path to the `.rad` file to create.
+        text: The full Radiance description to write.
+        mute: If False, logs an INFO message upon successful write.
+
+    Raises:
+        IOError: If the file cannot be written.
+    """
+    filepath = Path(filepath)  # ensure its a Path
+    try:
+        filepath.write_text(text)
+        if not mute:
+            logger.info(f"Written: {filepath}")
+    except Exception as exc:
+        logger.error(f"Cannot write {filepath}: {exc}")
+        raise
+
+def make_path(base: str, *segments: str) -> str:
+    """Join base path with one or more subdirectories or filenames."""
+    return posixpath.join(base, *segments)
+
+def rotation_matrix(axis, theta_degrees):
+    theta = np.radians(theta_degrees)
+    if axis == 'x':
+        return np.array([[1, 0, 0],
+                            [0, np.cos(theta), -np.sin(theta)],
+                            [0, np.sin(theta), np.cos(theta)]])
+    elif axis == 'y':
+        return np.array([[np.cos(theta), 0, np.sin(theta)],
+                            [0, 1, 0],
+                            [-np.sin(theta), 0, np.cos(theta)]])
+    elif axis == 'z':
+        return np.array([[np.cos(theta), -np.sin(theta), 0],
+                            [np.sin(theta), np.cos(theta), 0],
+                            [0, 0, 1]])
+    else:
+        raise ValueError("Axis must be 'x', 'y', or 'z'.")
+
+
+class Apollo:
     """
     Integrated light-source generator, compatible with Radiance-based simulations.
 
@@ -114,7 +127,7 @@ class SkyGen:
     Initializes with `daylight_params`, a dataclass containing:
       - n_bands: Number of spectral bands (None for luminance-only)
       - albedo: Broadband ground albedo
-      - material_def: Radiance material definition for ground
+      - material: Radiance material definition for ground
       - ground_radius: Radius of ground ring (m)
       - n_suns: Number of proxy suns (None for single sun)
 
@@ -124,7 +137,7 @@ class SkyGen:
     def __init__(self, daylight_params):
         self.n_bands = daylight_params.n_bands
         self.n_suns = daylight_params.n_suns
-        self.material_def = daylight_params.material_def
+        self.material = daylight_params.material
         self.ground_radius = daylight_params.ground_radius
         # Broadband aggregated albedo for use by the Perez model
         if not 0.0 <= daylight_params.albedo <= 1.0:
@@ -168,12 +181,10 @@ class SkyGen:
         n_bands = self.n_bands
         n_suns = self.n_suns
         albedo = self.albedo
-        # Retrieve the direct normal and diffuse horizontal irradiance componets
         DNI, DHI = comb_df[['DNI', 'DHI']]
-        # Retrieve solar position and air mass
+        # Solar position and air mass
         zenith, azimuth, m = comb_df[['Z', 'A', 'm']] 
-        # Retrieve the current daylight hour
-        DH = comb_df['DH'] 
+        DH = comb_df['DH']  # daylight hour
 
         # Limits for sky clearness
         skyclearinf = 1.0
@@ -190,15 +201,11 @@ class SkyGen:
         d_sun_earth = pvlib.solarposition.nrel_earthsun_distance(local_time).iloc[0]  # AU
         # Compute the actual sun disk radius
         sun_radius = (opening_angle / 2) * (1 / d_sun_earth)
-        logger.debug(f'Solar disk radius: {round(sun_radius, 4)}')
 
-        # Calculate the Earth's orbital eccentricity correction factor
-        #   which adjusts the solar constant based on Earth's varying distance from the sun
-        #   throughout the year due to the elliptical shape of its orbit        
+        # Calculate the Earth's orbital eccentricity correction factor     
         year = local_time.year
         month = local_time.month
         day = local_time.day
-        #local_time_hours = local_time.hour + local_time.minute/60 + local_time.second/3600
 
         def jdate(month: int, day: int, year: int) -> int:
             """Calculate Julian date of the given time instance."""
@@ -206,7 +213,6 @@ class SkyGen:
             # Adjust for leap year
             if (year % 4 == 0 and year % 100 != 0) or (year % 400 == 0):
                 days_per_month[1] = 29
-            # Calculate day number
             daynum = sum(days_per_month[:month - 1]) + day
             return daynum
 
@@ -218,7 +224,6 @@ class SkyGen:
         # Solar position data processing
         Z = math.radians(zenith)
         E = math.radians(90 - Z)
-        # Compute the elevation matrix
         elevation_matrix = rotation_matrix('x', 90 - zenith)
         # The azimuth passed into gensdaylit is defined with reference the + y-axis (North)
         #   and measured positive clockwise, while the matrix rotation is defined along the + z-axis
@@ -277,7 +282,7 @@ class SkyGen:
                     clearness = skyclearinf
                 elif clearness > skyclearsup:
                     error_message += f"Very high sky clearness {clearness}, set to {skyclearsup - 0.001}. "
-                    clearness = skyclearsup - 0.001  # Slightly below upper limit
+                    clearness = skyclearsup - 0.001  # slightly below upper limit
                 if brightness < skybriginf:
                     error_message += f"Very low sky brightness {brightness}, set to {skybriginf}. "
                     brightness = skybriginf
@@ -405,20 +410,18 @@ class SkyGen:
         buffer = sum(lv_mod[i] * math.cos(math.radians(_THETA_GRID[i])) for i in range(145))
         diffuse_norm = buffer * (2.0 * math.pi / 145.0)
         diffuse_norm = DHI / diffuse_norm
-        logger.debug(f"Diffuse normalization factor: {diffuse_norm}")
 
         # 4) Calculate radiance and solid angle subtended by the Sun
         solid_angle = 2 * math.pi * (1 - math.cos(math.radians(sun_radius)))
         solar_rad = DNI / solid_angle    
-        logger.debug(f"Solar radiance: {solar_rad}")
 
         def normsc(S_INTER: int, elevation: float) -> float:
             """Computes a normalization factor based on elevation and sky conditions via
             polynomial approximation.
             """
             nfc = [
-                [2.766521, 0.547665, -0.369832, 0.009237, 0.059229],  # Clear sky
-                [3.5556, -2.7152, -1.3081, 1.0660, 0.60227],          # Intermediate sky
+                [2.766521, 0.547665, -0.369832, 0.009237, 0.059229],  # clear sky
+                [3.5556, -2.7152, -1.3081, 1.0660, 0.60227],          # intermediate sky
             ]
             nf = nfc[S_INTER]
             x = (elevation - math.pi / 4.0) / (math.pi / 4.0)
@@ -499,13 +502,12 @@ class SkyGen:
             n_bands=n_bands
         )
         # - ground function block
-        N_acro = f"_N{n_bands}" if n_bands else ""
-        ground_text = self._build_ground_text(N_acro)
+        ground_text = self._build_ground_text()
         full_text = sun_sky_text + "\n" + ground_text
-        logger.debug("Full sun + sky + ground description\n{}", full_text)
 
-        Ns_acro = f"_Ns{n_suns}" if n_suns else ""
-        sky_path = make_path('skies', f"gensdaylit_DH{DH}{N_acro}{Ns_acro}.rad")
+        n_prefix = f"_N{n_bands}" if n_bands else ""
+        ns_prefix = f"_Ns{n_suns}" if n_suns else ""
+        sky_path = make_path('skies', f"gensdaylit_DH{DH}{n_prefix}{ns_prefix}.rad")
         write_rad_file(sky_path, full_text)
 
         return [sky_path], daylight_errors
@@ -655,7 +657,7 @@ class SkyGen:
             """)
         return text
 
-    def _build_ground_text(self, N_acro: str) -> str:
+    def _build_ground_text(self) -> str:
         """Generate the Radiance ground-plane ring text."""
         tpl = textwrap.dedent("""\
             # Use an upside-down sky to represent ground
@@ -671,14 +673,13 @@ class SkyGen:
 
             # Ground plane locally replaces ground glow with a material whose
             # irradiance depends on the surrounding environment and sky
-            {material}{N_acro} ring ground_plane
+            {material} ring ground_plane
             0
             0
             8 0 0 -.01 0 0 1 0 {radius}
         """)
         return tpl.format(
-            material=self.material_def,
-            N_acro=N_acro,
+            material=self.material,
             radius=self.ground_radius
         )
 
@@ -705,7 +706,6 @@ class SkyGen:
             sun_dir_list (list): Contains the sun direction vectors for each proxy sun.
         """
         filepath = make_path('skies', cache_file)
-        # Check if the file with the coordinates of the proxy suns exists
         if os.path.exists(filepath):
             points = np.loadtxt(filepath)
             if points.ndim == 1:
@@ -717,16 +717,13 @@ class SkyGen:
             epsilon = 0.5  # For Canonical Lattice
             # Each point, i, is defined based on an arbitrary number, n_suns
             i = np.arange(0, self.n_suns)
-            # Definition of cartesian coordinates
             x = i / golden_ratio
             y = (i + epsilon) / (self.n_suns - 1 + 2*epsilon)  # Fibonacci Lattice
             # Map the point distribution to a unit disk via equal-area transformation
             theta = 2 * np.pi * x  # [0, 2pi]
             r = np.sqrt(y) * np.radians(sun_disk_radius)  # Adjust by solar disk radius
-            # Convert back to cartesian
             x_coord = r * np.cos(theta)
             y_coord = r * np.sin(theta)
-            # Stack arrays vertically, consisting of each point's coordinates (n rows, 2 columns)
             points_cartesian = np.vstack((x_coord, y_coord)).T
             # Save the displacement vectors to the cache file
             np.savetxt(filepath, points_cartesian, fmt="%.6f")
