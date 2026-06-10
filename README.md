@@ -154,8 +154,8 @@ skies/spectrum/sky_spectrum_N<bands>_<YYYYMMDD_HHMMSS>.dat
 
 These contain the SMARTS-derived, per-band spectral fractions for the sun and
 sky and must be present for spectral renders. Their generation (SMARTS →
-CAELUS/GISPLIT decomposition → per-band scaling) is part of the upstream
-pipeline described in the paper and is **not** included in this repository.
+per-band scaling) is part of the upstream pipeline described in the paper and
+is **not** included in this repository.
 
 ---
 
@@ -177,5 +177,4 @@ repository is released under the [MIT License](LICENSE).
 
 Built on the [Radiance](https://www.radiance-online.org/) lighting-simulation
 suite. Thanks to the Radiance community — in particular Greg Ward and Taoning
-Wang. Atmospheric inputs in the accompanying study drew on AERONET and the KIT
-KITcube observation system.
+Wang.
