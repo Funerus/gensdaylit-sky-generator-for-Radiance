@@ -1,0 +1,30 @@
+cff-version: 1.2.0
+title: >-
+  gensdaylit — Spectral, penumbra-aware sky generator for Radiance
+message: >-
+  If you use this software, please cite both the software and the
+  accompanying paper.
+type: software
+author:
+  - name: Odysseas Alexandros Katsikogiannis
+    affiliation: Delft University of Technology
+    email: O.A.Katsikogiannis@tudelft.nl
+version: 0.1.0
+repository-code: >-
+  https://github.com/Funerus/gensdaylit-sky-generator-for-Radiance
+license: MIT
+preferred-citation:
+  type: article
+  title: >-
+    Tracing rays from leaves to sky: Multispectral, penumbra-aware
+    irradiance modeling for agrivoltaic orchards
+  authors:
+    - Odysseas Alexandros Katsikogiannis
+    - Olindo Isabella
+    - Rudi Santbergen
+    - Hesan Ziar
+  journal: Applied Energy
+  volume: "420"
+  start: "128087"
+  year: 2026
+  doi: 10.1016/j.apenergy.2026.128087
