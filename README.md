@@ -22,20 +22,6 @@ This code accompanies the paper:
 
 ---
 
-## Features
-
-- **Atmosphere-specific, full-spectrum sun–sky generation.** Rather than RGB
-  triples, the sun and sky use Radiance's `specfile` spectral pattern primitive,
-  reading per-band `(wavelength, value)` samples so an arbitrary number of
-  wavebands can be represented.
-- **Penumbra via proxy suns.** The finite solar disc is sampled with an
-  equal-area Fibonacci lattice; proxy-sun radiances sum to the target DNI,
-  yielding soft shadows.
-- **Single-waveband mode.** Setting `n_bands = None` falls back to a conventional
-  (non-spectral) sky.
-
----
-
 ## Repository structure
 
 ```
